@@ -1,0 +1,54 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: adriano_cobuccio_app
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=adriano_cobuccio
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
+  web:
+    image: nginx:alpine
+    container_name: adriano_cobuccio_web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+  db:
+    image: mysql:8.0
+    container_name: adriano_cobuccio_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: adriano_cobuccio
+      MYSQL_ROOT_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: adriano_cobuccio_phpmyadmin
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=secret
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+volumes:
+  dbdata:
