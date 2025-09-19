@@ -7,8 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
+    /**
+     * Cria uma nova transação para o usuário.
+     * @param array $dados
+     * @return Transaction
+     */
+    public static function novaTransacao(array $dados): Transaction
+    {
+        return self::create($dados);
+    }
     protected $table = 'transactions';
     use HasFactory;
+
 
     protected $fillable = [
         'user_id',
@@ -16,7 +26,14 @@ class Transaction extends Model
         'type',
         'description',
         'executed_at',
+        'category_transaction_id',
+        'destino_tipo',
+        'destino',
+        'reverted',
     ];
 
-    protected $dates = ['data'];
+    public function category()
+    {
+        return $this->belongsTo(TransactionCategory::class, 'category_transaction_id');
+    }
 }

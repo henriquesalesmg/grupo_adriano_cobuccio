@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Classes\Activities;
 
 class LoginController extends Controller
 {
@@ -21,7 +22,9 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
+            session(['last_login_at' => now()]);
             $request->session()->regenerate();
+            Activities::build('Usuário logou no sistema');
             return redirect()->intended('/dashboard');
         }
 
@@ -35,6 +38,7 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        Activities::build('Usuário deslogou do sistema');
         return redirect('/login');
     }
 }

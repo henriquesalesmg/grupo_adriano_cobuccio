@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use App\Models\User;
+use App\Http\Classes\Activities;
 
 class ForgotPasswordController extends Controller
 {
@@ -59,7 +60,7 @@ class ForgotPasswordController extends Controller
         }
         $user->password = Hash::make($request->password);
         $user->save();
-
+        Activities::build('Usuário redefiniu a senha');
         return redirect()->route('login')->with('status', 'Senha redefinida com sucesso!');
     }
 }

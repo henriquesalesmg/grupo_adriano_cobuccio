@@ -77,9 +77,9 @@ class AuthSuccessTest extends TestCase
             'password' => bcrypt('Password123!'),
         ]);
         $this->actingAs($user);
-        $response = $this->post('/logout');
-        $response->assertRedirect('/');
-        $this->assertGuest();
+    $response = $this->post('/logout');
+    $response->assertRedirect('/login');
+    $this->assertGuest();
     }
 
     /** @test */
@@ -97,7 +97,7 @@ class AuthSuccessTest extends TestCase
         $responseLogin->assertSee('Entrar');
 
         $responseRegister = $this->get('/register');
-        $responseRegister->assertStatus(200);
-        $responseRegister->assertSee('Criar novo cadastro');
+    $responseRegister->assertStatus(200);
+    $responseRegister->assertSee('Registrar');
     }
 }

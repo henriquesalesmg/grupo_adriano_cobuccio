@@ -23,6 +23,7 @@
         </div>
     </nav>
     <main class="flex-grow-1">
+        <x-responses />
         @yield('content')
     </main>
     <footer class="text-center text-muted py-3 small">

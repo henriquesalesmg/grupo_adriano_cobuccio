@@ -11,10 +11,15 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('category_transaction_id')->nullable();
+            $table->foreign('category_transaction_id')->references('id')->on('transaction_categories')->nullOnDelete();
             $table->decimal('amount', 15, 2);
-            $table->enum('type', ['credit', 'debit']);
+            $table->enum('type', ['credit', 'debit', 'transfer']);
             $table->string('description')->nullable();
-            $table->timestamp('executed_at')->nullable();
+            $table->date('executed_at')->nullable();
+            $table->string('destino_tipo')->nullable();
+            $table->string('destino')->nullable();
+            $table->boolean('reverted')->default(false)->nullable();
             $table->timestamps();
         });
     }

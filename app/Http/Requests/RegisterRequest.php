@@ -16,7 +16,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'cpf' => ['required', 'string', 'size:14', 'unique:users', function($attribute, $value, $fail) {
+            'cpf' => ['required', 'string', 'min:11', 'max:14', 'unique:users', function($attribute, $value, $fail) {
                 $cpf = preg_replace('/[^0-9]/', '', $value);
                 if (strlen($cpf) != 11 || preg_match('/^(\d)\1{10}$/', $cpf)) {
                     return $fail('CPF inválido.');
@@ -48,7 +48,7 @@ class RegisterRequest extends FormRequest
         return [
             'cpf.required' => 'O campo CPF é obrigatório.',
             'cpf.unique' => 'Este CPF já está cadastrado.',
-            'cpf.size' => 'O CPF deve estar no formato 000.000.000-00.',
+            'cpf.size' => 'O CPF deve ter 11 dígitos.',
             'cpf.*' => 'CPF inválido.',
             'birthdate.required' => 'A data de nascimento é obrigatória.',
             'birthdate.date' => 'A data de nascimento deve ser uma data válida.',

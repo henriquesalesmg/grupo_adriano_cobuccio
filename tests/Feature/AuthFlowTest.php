@@ -13,8 +13,8 @@ class AuthFlowTest extends TestCase
     public function test_register_form_loads()
     {
         $response = $this->get('/register');
-        $response->assertStatus(200);
-        $response->assertSee('Criar novo cadastro');
+    $response->assertStatus(200);
+    $response->assertSee('Registrar');
     }
 
     public function test_user_can_register()

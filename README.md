@@ -7,55 +7,159 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+# Sistema Financeiro - Adriano Cobuccio
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+> Sistema de gestão financeira pessoal, desenvolvido em Laravel 12, com arquitetura orientada a serviços (Service Layer), Repository, SOLID, autenticação, relatórios, extratos, transferências, reversões, comprovantes em PDF e histórico de atividades.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Sumário
+- [Descrição do Projeto](#descrição-do-projeto)
+- [Pré-requisitos](#pré-requisitos)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Funcionalidades](#funcionalidades)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Instruções de Instalação e Execução](#instruções-de-instalação-e-execução)
+- [Executando com Docker](#executando-com-docker)
+- [Seeders e Banco de Dados](#seeders-e-banco-de-dados)
+- [APIs e Rotas](#apis-e-rotas)
+- [Decisões de Arquitetura](#decisões-de-arquitetura)
+- [Medidas de Segurança](#medidas-de-segurança)
+- [Diagrama UML do Banco de Dados](#diagrama-uml-do-banco-de-dados)
+- [Relatório de Testes Automatizados](#relatório-de-testes-automatizados)
 
-## Learning Laravel
+## Descrição do Projeto
+Sistema de controle financeiro pessoal, com cadastro de usuários, contas, categorias, movimentações (receitas, despesas, transferências), extratos, relatórios em PDF, reversão de transações, histórico de atividades e comprovantes. O sistema segue padrões SOLID, Service Layer, Repository e utiliza validações robustas em todas as operações.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Pré-requisitos
+- PHP >= 8.2
+- Composer
+- MySQL ou PostgreSQL
+- Node.js (para assets)
+- Docker (opcional)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Tecnologias Utilizadas
+- **Backend:** Laravel 12, Eloquent ORM
+- **Frontend:** Blade, Bootstrap 5
+- **PDF:** barryvdh/laravel-dompdf
+- **Testes:** PHPUnit
+- **Arquitetura:** Service Layer, Repository, DTOs, FormRequest, Traits
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Funcionalidades
+- Cadastro e autenticação de usuários
+- Cadastro de contas bancárias
+- Movimentações: receitas, despesas, transferências
+- Relatórios e extratos filtráveis (PDF)
+- Histórico de transferências e atividades
+- Reversão de transações
+- Comprovantes em PDF
+- Validações robustas (FormRequest)
+- Seeders para dados de exemplo
 
-## Laravel Sponsors
+## Estrutura do Projeto
+```
+/
+├── app/
+│   ├── Http/Controllers
+│   ├── Services/
+│   ├── Models/
+│   ├── Traits/
+│   └── DTOs/
+├── resources/views/
+├── database/
+│   ├── migrations/
+│   ├── seeders/
+│   └── factories/
+├── public/
+├── tests/
+├── .env
+└── README.md
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Instruções de Instalação e Execução
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/henriquesalesmg/grupo_adriano_cobuccio.git
+   cd adriano_cobuccio
+   ```
+2. Instale as dependências:
+   ```bash
+   composer install
+   npm install && npm run dev
+   ```
+3. Configure o `.env` e gere a key:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+4. Execute as migrações e seeders:
+   ```bash
+   php artisan migrate --seed
+   ```
+5. Inicie o servidor:
+   ```bash
+   php artisan serve
+   ```
+6. Acesse em [http://localhost:8000](http://localhost:8000)
 
-### Premium Partners
+## Executando com Docker (Automático)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Agora basta rodar **um único comando** e todo o ambiente será preparado automaticamente (dependências, key, migrations, seeders, build de assets):
 
-## Contributing
+```sh
+docker compose up -d --build
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Acesse o sistema em [http://localhost:8080](http://localhost:8080)
 
-## Code of Conduct
+> **Nota:** O Dockerfile e o entrypoint automatizam todo o setup do ambiente. Após rodar `docker compose up -d --build`, não é necessário executar comandos manuais para instalar dependências, rodar migrations, seeders ou gerar a key do Laravel. Tudo é feito automaticamente!
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Seeders e Banco de Dados
+- O seeder `DemoUsersAndTransactionsSeeder` cria 4 usuários, cada um com conta e 5 transações (crédito, débito, transferência), facilitando testes e visualização dos relatórios e extratos.
+- Estrutura das tabelas e relacionamentos pode ser visualizada no diagrama UML abaixo.
 
-## Security Vulnerabilities
+## APIs e Rotas
+- Rotas web protegidas por autenticação.
+- Endpoints principais:
+    - `/login`, `/register`, `/transactions`, `/deposit`, `/withdraw`, `/transfer`, `/relatorio`, `/historical`, `/reversals`, `/activities`, `/receipt/{type}/{id}`
+- Todas as rotas validam dados via FormRequest.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Decisões de Arquitetura
+- **Service Layer:** Toda regra de negócio centralizada em Services, controllers apenas orquestram.
+- **Repository:** (em evolução) Criação de TransactionRepository para encapsular persistência.
+- **DTOs:** Transferência de dados entre camadas.
+- **FormRequest:** Validação e normalização de dados.
+- **Traits:** Reutilização de lógica (ex: EncryptableFields).
+- **SOLID:** Código desacoplado, testável e de fácil manutenção.
 
-## License
+## Medidas de Segurança
+- Autenticação obrigatória
+- Senhas criptografadas
+- Validação de entrada em todas as rotas
+- Proteção CSRF
+- Rate limiting no login
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Diagrama UML do Banco de Dados
+
+O diagrama UML das tabelas principais está disponível em formato PDF na pasta `public` do projeto.
+
+- [Clique aqui para visualizar o diagrama UML (PDF)](public/diagrama_uml.pdf)
+
+> O arquivo `diagrama_uml.pdf` apresenta a estrutura das tabelas, relacionamentos e principais campos do banco de dados do sistema.
+
+## Relatório de Testes Automatizados
+
+- Todos os testes automatizados do sistema passaram com sucesso na última execução (19/09/2025).
+- Para detalhes completos, consulte o relatório em [`docs/test-report.md`](docs/test-report.md).
+
+### Como executar os testes
+
+```sh
+docker compose exec app vendor/bin/phpunit --testdox
+```
+
+> **Status:** Todos os testes passaram ✔️
+
+---
+
+> Sistema desenvolvido para fins de avaliação técnica, destacando experiência com Laravel, arquitetura SOLID, Service Layer, Repository, Docker e boas práticas de segurança e validação.
